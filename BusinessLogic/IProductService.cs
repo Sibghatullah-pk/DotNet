@@ -1,12 +1,14 @@
-﻿using Model;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Model;
 
 namespace BusinessLogic
 {
     public interface IProductService
     {
-        List<ProductModel> GetAllData();
+        Task<List<ProductModel>> GetAllDataAsync();
+        Task<bool> AddProductAsync(ProductModel product);
+        Task<bool> UpdateProductAsync(ProductModel product);
+        Task<bool> DeleteProductAsync(int pId);
     }
 }

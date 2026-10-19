@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Npgsql;
+namespace DataAccessLayer;
 
-namespace DataAccessLayer
+/// <summary>
+/// Holds the existing Supabase connection settings in one place for the
+/// application's singleton NpgsqlDataSource.
+/// </summary>
+public static class DBHelper
 {
-    public class DBHelper
-    {
-        public static NpgsqlConnection GetConnection()
-        {
-            return new NpgsqlConnection("Host=aws-0-ap-northeast-2.pooler.supabase.com;" + //host address
-                "Port=6543;" +
-                "Database=postgres;" +
-                "Username=postgres.ydihqbigntggnohaogxf;" +
-                "Password=Sibghat@123;" +
-                "SSL Mode=Require;" +
-                "Trust Server Certificate=true");// setting for secure communication
-        }
-    }
+    public const string ConnectionString = @"
+        Host=aws-0-ap-northeast-2.pooler.supabase.com;
+        Port=5432;
+        Database=postgres;
+        Username=postgres.ydihqbigntggnohaogxf;
+        Password=Sibghat@123;
+        SSL Mode=Require;
+        Trust Server Certificate=true;
+        Timeout=15;
+        Command Timeout=30;";
 }
-

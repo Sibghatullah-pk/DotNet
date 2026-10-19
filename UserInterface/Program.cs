@@ -1,5 +1,5 @@
-using UserInterface.Components;
 using BusinessLogic;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,24 +7,26 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+// Reuse the connection string already configured in DataAccessLayer/DBHelper.cs.
+string connectionString = DataAccessLayer.DBHelper.ConnectionString;
+builder.Services.AddSingleton<NpgsqlDataSource>(_ => NpgsqlDataSource.Create(connectionString));
+
+// 2. Register Product Service
 builder.Services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
-app.UseHttpsRedirection();
 
+app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseAntiforgery();
 
-app.MapStaticAssets();
-app.MapRazorComponents<App>()
+app.MapRazorComponents<UserInterface.Components.App>()
     .AddInteractiveServerRenderMode();
 
 app.Run();
